@@ -1,0 +1,79 @@
+---
+title: "Matrix"
+author: "H24076150"
+date: "2020/4/30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Construct a matrix
+### Construct a matrix by row
+A matrix is a generalization containung multiple vectors.
+```{r, echo=TRUE}
+a <- 1:5; b <- 6:10;
+c <- 11:15; d <- 16:20
+```
+How to construct a matrix?
+```{r, echo=TRUE}
+M1 <- rbind(a, b, c, d)
+M1
+dim(M1)
+```
+### Construct a matrix by column
+```{r, echo=TRUE}
+M2 <- cbind(a, b, c, d)
+M2
+dim(M2)
+```
+### Construct a matrix by a long vector
+A matrix is a generalization containung multiple vectors.
+```{r, echo=TRUE}
+X <- 1:20
+matrix(X, nrow = 4, ncol = 5)
+matrix(X, nrow = 4, ncol = 5, byrow = TRUE)
+matrix(X, nrow = 5, ncol = 4)
+matrix(X, nrow = 5, ncol = 4, byrow = TRUE)
+```
+### Features for a matrix 
+```{r, echo=TRUE}
+M1
+dim(M1)
+colnames(M1); rownames(M1)
+colnames(M1) <- c("V1", "V2", "V3", "V4", "V5")
+```
+### Names in a matrix
+```{r, echo=TRUE}
+dimnames(M1)
+dimnames(M2)
+```
+## Extract elements from a matrix
+We still use "[]" to extract elements from a matrix, but using a "," to identify the locations of row and column sperately.
+```{r, echo=TRUE}
+M1[2, 4]; M1[3, 5]
+M1[c(2, 4), 3]; M1[c(2, 4), c(3, 5)]
+```
+If you think these elements are from a vecotor but a matrix, you will type:
+```{r, echo=TRUE}
+M1
+M1[5]
+M1[13]
+M2
+M2[5]
+M2[13]
+```
+### Extract a row or a column from a matrix
+```{r, echo=TRUE}
+M1[, 4]; M1[3, ]
+M1[c(2, 4), ]; M1[, c(3, 5)]
+```
+### Extract elements by names
+Recall M1. The names of rows are a, b, c, and d. Take the rows of b and c.
+```{r, echo=TRUE}
+M1[c("b", "c"),]
+```
+The names of columns are V1, V2, V3, V4, and V5. Take the rows of b and c and the columns of V2 and V5.
+```{r, echo=TRUE}
+M1[c("b", "c"),c("V2", "V5")]
+```
