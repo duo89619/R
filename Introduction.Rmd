@@ -1,0 +1,106 @@
+---
+title: "Introduction"
+author: "H24076150"
+date: "2020/4/29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Calculator
+```{r, echo=TRUE}
+5 + 3
+5 * 3
+5 / 3
+5 ^ 3
+5 %% 3
+5%/%3
+```
+## Sequence
+```{r, echo=TRUE}
+1:10
+seq(1, 10, 2)
+seq(1, 10, length.out = 6)
+```
+## Basic features in R
+```{r, echo=TRUE}
+a <- 3 ^ 5
+b = 3 ^ 5
+a
+b
+```
+## Calculation by the set values
+```{r, echo=TRUE}
+a <- 1000
+b <- 4
+a * b - a
+# If you don't assign a value to a name of variable, then you will get the error message.
+```
+## Special values in R 
+```{r, echo=TRUE}
+NA
+NaN   ###0/0
+Inf   ###2/0
+-Inf  ###-2/0
+pi
+1e-3
+```
+### More example of special values in R
+```{r, echo=TRUE}
+Inf + 100
+Inf - Inf + 10
+NaN + Inf
+NA + Inf
+NaN + NA
+```
+## Name an object
+* Avoid the following words:
+  + break; else; FALSE; F; TRUE; T; for; function; if; Inf; NA; NaN; next; repeat; return; while
+* Name a meaningful object by "." or "_"
+  + score1, score2
+  + score.John, score.Jack
+
+## More on calculation
+```{r, echo=TRUE}
+# Absolute value
+abs(-2)
+# Exponential
+exp(10)
+# logarithm
+log(2); log2(2); log(10); log10(10)
+log(10, base = 10); log10(10)
+log(10, base = exp(1)); log(10)
+```
+## Other functions
+"^" or "**" means the degree of the power.
+```{r, echo=TRUE}
+2 ^ 3; 2 ** 3
+2 ^ 0.5; sqrt(2)
+```
+Trigonometric function: sin(), cos(), tan(), asin(), acos(), atan()
+
+## Approximated values (1)
+```{r, echo=TRUE}
+round(125.78253)
+round(125.78253, digits = 3)
+round(125.78253, digits = -2)
+round(83524587, digits = -3); round(83524587, digits = -5)
+```
+## Approximated values (2) 
+```{r, echo=TRUE}
+signif(125.78253, digits = 2)
+signif(83524587, digits = 3); signif(83524587, digits = 5)
+floor(125.78253)
+ceiling(125.78253)
+trunc(125.78253)
+```
+## R is not just a calculator
+There are a lot of functions you can use. Let's see some related to Statistics.
+```{r, echo=TRUE}
+x <- 1:25
+mean(x)
+var(x)
+median(x)
+quantile(x, c(0.1, 0.5, 0.7))
+```
