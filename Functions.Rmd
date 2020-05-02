@@ -1,0 +1,327 @@
+---
+title: "Functions"
+author: "H24076150"
+date: "2020/5/2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Use source()
+### source()
+(1) Creat a new script for your function or codes.
+(2) Save the script named as "XXX.R" and use scource() to run the code.
+(3) Remember to use print() or cat() so that your final answer will be shown.
+
+Example:
+```{r, echo=TRUE}
+x <- c(0.8933, 0.2344, 0.0764, 0.7736)
+x.percent <- round(100*x, digits = 1)
+x.show <- paste(x.percent, "%", sep = "")
+print(x.show)
+cat(x.show)
+```
+### print() & cat()
+**print()** shows with " " between characters.
+
+**cat()** shows without " " between characters. You can add "\\n" to make characters in a new line.
+```{r, echo=TRUE}
+x <- c("A", "B", "C", "D")
+print(x)
+cat(x)
+cat(x[1], "\n", x[2], "\n", sep = "")
+```
+### Another example by source()
+Find all perfect numbers smaller than 100. Show the results by **print()**.
+```{r, echo=TRUE}
+k <- 1
+while(k < 100){
+  fac <- c()
+  for(j in 1:k){
+    if((k %% j) == 0) fac <- c(fac, j)
+  }
+  if(k == sum(fac[-length(fac)])){
+    out <- paste(paste(k, " = ", sep = ""),
+                 paste(fac[-length(fac)], collapse = " + "), sep = " ")
+    print(out)
+  }
+  k <- k + 1
+}
+```
+Find all perfect numbers smaller than 100. Show the results by **cat()**.
+```{r, echo=TRUE}
+k <- 1
+while(k < 100){
+  fac <- c()
+  for(j in 1:k){
+    if((k %% j) == 0) fac <- c(fac, j)
+  }
+  if(k == sum(fac[-length(fac)])){
+    cat(paste(k, " = ", sep = ""),
+        paste(fac[-length(fac)], collapse = " + "), "\n")
+  }
+  k <- k + 1
+}
+```
+Find all perfect numbers smaller than 100. Show the results by **cat()** but without "\\n".
+```{r, echo=TRUE}
+k <- 1
+while(k < 100){
+  fac <- c()
+  for(j in 1:k){
+    if((k %% j) == 0) fac <- c(fac, j)
+  }
+  if(k == sum(fac[-length(fac)])){
+    cat(paste(k, " = ", sep = ""),
+        paste(fac[-length(fac)], collapse = " + "))
+  }
+  k <- k + 1
+}
+```
+## Use function() with one single input
+### function()
+Use **function()** when you only have one main code for evaluation and multiple possible input, like
+
+<center>$f(x)=3x+2, x=2,3,4$.</center>
+$f$ means a name of a function of input $x$ when $x=2,3,4$.
+```{r, echo=TRUE}
+f <- function(x){
+  3*x + 2
+}
+f(2); f(3); f(4)
+```
+### Example for function()
+```{r, echo=TRUE}
+make.percent <- function(x){
+  x.percent <- round(100*x, digits = 1)
+  x.show <- paste(x.percent, "%", sep = "")
+  cat(x.show)
+}
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+ans <- make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+ans ## Why does ans show NULL?
+```
+### return() in the function()
+You must tell what will be return when you use the function by **return()** or **invisible()**. If you don't put **return()** or at the end of the function, it will treat the last line as the result automatically.
+```{r, echo=TRUE}
+f <- function(x){
+  return(3*x + 2)
+}
+f(2)
+f <- function(x){
+  res <- (3*x + 2)
+}
+f(2) ## why return nothing?
+a <- f(2); a
+```
+### Example: percent by function() and return()
+```{r, echo=TRUE}
+make.percent <- function(x){
+  x.percent <- round(100*x, digits = 1)
+  x.show <- paste(x.percent, "%", sep = "")
+  return(x.show) ## compare to cat(x.show)
+}
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+ans <- make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+ans
+```
+### Example: percent by function() and invisible()
+```{r, echo=TRUE}
+make.percent <- function(x){
+  x.percent <- round(100*x, digits = 1)
+  x.show <- paste(x.percent, "%", sep = "")
+  invisible(x.show) ## compare to return(x.show)
+}
+
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+ans <- make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+ans
+```
+### Perfect number
+Find all perfect numbers smaller than 10000.Show the results by **cat()**, named **perect.number**. After getting all the perfect numbers, count the number of all perfect numbers smaller than 10000.
+```{r, echo=TRUE}
+perfect.number <- function(n){
+  k <- 1
+  out <- c()
+  while(k < n){
+    fac <- c ()
+    for(j in 1:k){
+      if((k %% j) == 0) fac <- c(fac, j)
+    }  
+    if(sum(fac[-length(fac)])==k) out <- c(out, k)
+    k <- k + 1
+  }
+  cat(out)
+}
+perfect.number(10000)
+ans <- perfect.number(10000)
+length(ans)
+```
+### Remark for the functions
+* The name of a function is also a type of an object.
+
+* If there are a vector and a function with the same name, then the type of the object will be the last one.
+
+Example
+```{r, echo=TRUE}
+objA <- function(x){
+  return(2*x)
+}
+objA ## give a function
+objA <- objA(4)
+objA ## give a value
+```
+## Use function() with multiple input variables
+### function()
+Use **function()**when yoy only have one main code for ebaluation and multiple possible input, like
+
+<center>$f(x,y)=x^2+y^2,$ $x,y=2,3,4.$</center>
+
+$f$ means a name of a function of input $x$ and $y$ when $x,y=2,3,4$.
+```{r, echo=TRUE}
+f <- function(x, y){
+  x^2 + y^2
+}
+f(2, 2); f(2, 3); f(2, 4)
+```
+### Example: percent
+```{r, echo=TRUE}
+make.percent <- function(x, x.digits){
+  x.percent <- round(100*x, digits = x.digits)
+  x.show <- paste(x.percent, "%", sep = "")
+  return(x.show)
+}
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736), 0)
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736), 1)
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736), 2)
+```
+### Example: perfect number
+```{r, echo=TRUE}
+perfect.number <- function(a, b){
+  k <- a
+  res <- c()
+  while(k < b){
+    fac <- c ()
+    for(j in 1:k){
+      if((k %% j) == 0) fac <- c(fac,j)
+    }  
+    if(sum(fac[-length(fac)]) == k) res <- c(res, k)
+    k <- k + 1
+  }
+  return(res)
+}
+perfect.number(10, 10000)
+```
+### Set a default in the function
+Add the settings og default in the arguments of input variables.
+
+<center> f <- function(x = 1, y = 10){...}</center>
+
+Example: percent
+```{r, echo=TRUE}
+make.percent <- function(x, x.digits = 0){
+  x.percent <- round(100*x, digits = x.digits)
+  x.show <- paste(x.percent, "%", sep = "")
+  return(x.show)
+}
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736))
+make.percent(c(0.8933, 0.2344, 0.0764, 0.7736), 0)
+```
+## Use function() and return multiple output
+### Introduction to list()
+**list()** is a collection of multiple types of objects, like vectors, characters, numbers, lists,...
+
+Example:
+```{r, echo=TRUE}
+X <- list(a = 3, b = c(1, 2, 3, 4, 5), c = c("A", "B"))
+X
+```
+### Extract an element from a list
+USe **$** or **[[]]**.
+
+* **$**: the name of the element.
+* **[[]]**: the location or the name of the element.
+```{r, echo=TRUE}
+X <- list(a = 3, b = c(1, 2, 3, 4, 5), c = c("A", "B"))
+X$a
+X[[2]]
+X[["c"]]
+```
+### Creat a list
+```{r, echo=TRUE}
+try.list <- list() ## a null list
+length(try.list)
+length(try.list) <- 2  ## assign the size to the list
+try.list[[1]] <- seq(0, 10, length.out = 3) ## without name
+try.list$square <- seq(0, 10, length.out = 3)^2
+try.list
+```
+### Extract element from the list
+```{r, echo=TRUE}
+try.list[[3]]
+try.list$square
+names(try.list)
+length(try.list)
+```
+### Use function() and list()
+Try to use **list()** to return more than one output.
+
+Example: perfect number
+```{r, echo=TRUE}
+perfect.number <- function(a, b){
+  k <- a
+  res <- c()
+  ans <- list()
+  while(k < b){
+    fac <- c ()
+    for(j in 1:k){
+      if((k %% j) == 0) fac <- c(fac,j)
+    }  
+    if(sum(fac[-length(fac)]) == k){
+      res <- c(res, k)
+      ans[[paste(k)]] <- fac[-length(fac)]
+    }
+      k <- k + 1
+  }
+  ans$number <- res
+  return(ans)
+}
+```
+### Output: perfect number
+```{r, echo=TRUE}
+Ans <- perfect.number(1, 100)
+Ans
+Ans[["28"]]
+```
+### Partially shown multiple output
+Use **invisible()** to hide some output.
+
+Example: perfect number
+```{r, echo=TRUE}
+perfect.number <- function(a, b){
+  k <- a
+  res <- c()
+  ans <- list()
+  while(k < b){
+    fac <- c ()
+    for(j in 1:k){
+      if((k %% j) == 0) fac <- c(fac,j)
+    }  
+    if(sum(fac[-length(fac)]) == k){
+      res <- c(res, k)
+      ans[[paste(k)]] <- fac[-length(fac)]
+    }
+      k <- k + 1
+  }
+  print(res)
+  ans$number <- res
+  return(invisible(ans))
+}
+```
+### Output: perfect number
+```{r, echo=TRUE}
+Ans <- perfect.number(1, 100)
+Ans
+length(Ans)
+```
