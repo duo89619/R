@@ -355,7 +355,6 @@ abline(a = 0, b = -2)
 ```
 
 ### Reference and packages
-
 * http://web.ntpu.edu.tw/~cflin/Teach/R/R06EN06Graphics.pdf
 
 * Package: ggplot2
