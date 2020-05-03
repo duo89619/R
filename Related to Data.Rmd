@@ -1,0 +1,223 @@
+---
+title: "Related to Data"
+author: "H24076150"
+date: "2020/5/3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Data Frame
+### data.frame()
+* Most data sets are stored in R as data frames.
+
+* These are like matrices, but with the columns having their own names.
+
+* Columns can be of different types from each other.
+
+Use the **data.frame()** to construct data frames from vectors:
+
+Example:
+```{r, echo=TRUE}
+colors <- c("red", "yellow", "blue")
+numbers <- c(1, 2, 3)
+colors.and.numbers <- data.frame(colors, numbers, more.numbers = c(4, 5, 6))
+colors.and.numbers
+
+```
+### Difference from matrix
+* These are like matrices, but with the columns having their own names.
+
+* Columns can be of different types from each other.
+
+Use matrix:
+```{r, echo=TRUE}
+X <- matrix(NA, 3, 3)
+X[, 1] <- c("red", "yellow", "blue")
+X[, 2] <- c(1, 2, 3)
+X[, 3] <- c(4, 5, 6)
+colnames(X) <- c("colors", "numbers", "more.numbers")
+X
+```
+### Type in a data fram
+Use **str()** to examine the types of columns in the data frame.
+```{r, echo=TRUE}
+str(colors.and.numbers)
+```
+### Type in a data fram: character
+Change the type from factor to character by using **stringAsFactors = FALSE**.
+```{r, echo=TRUE}
+colors <- c("red", "yellow", "blue")
+numbers <- c(1, 2, 3)
+colors.and.numbers <- data.frame(colors, numbers, more.numbers = c(4, 5, 6), stringsAsFactors = FALSE)
+str(colors.and.numbers)
+```
+### More on data.frame(): add rows
+Add column and row vectors into a data frame.
+
+* row: use **rbind()**
+
+* column: use the sign **$** or **cbind()**
+```{r, echo=TRUE}
+data1 <- data.frame(colors, numbers, more.numbers = c(4, 5, 6))
+data1 <- rbind(data1, c("black", 3, 5))
+data1
+```
+### stringsAsFactors = FALSE
+```{r, echo=TRUE}
+data2 <- data.frame(colors, numbers, more.numbers = c(4, 5, 6))
+data2 <- rbind(data2, c("black", 3, 5))
+data2
+str(data2)
+```
+### Comparison of two types
+```{r, echo=TRUE}
+str(data1)
+str(data2)
+```
+### More on data.frame(): add columns
+Add column and row vectors into a data frame.
+
+* column: use the sign **$** or **cbind()**
+
+* row: use **rbind()**
+```{r, echo=TRUE}
+colors <- c("red", "yellow", "blue")
+number1 <- c(1, 2, 3)
+number2 <- c(10, 11, 12)
+colors.and.numbers <- data.frame(colors, number1) ## construct a data frame
+colors.and.numbers$more.numbers <- c(4, 5, 6) ## add one column
+colors.and.numbers <- cbind(colors.and.numbers, number2) ## add one column
+colors.and.numbers
+```
+## Data input and output at hard disk
+### Change and find directory
+Change the directory: **setwd("dir")**
+
+Find the directory: **getwd()**
+
+### Save and load the objects
+Suppose you have constructed some R objects, type **dump(objects, file = "XXX.R")**.
+```{r, echo=FALSE}
+# Clear environment
+rm(list = ls())
+```
+
+```{r, echo=TRUE}
+X <- seq(0, 10, 0.1)
+A <- 3
+B <- mean(X)
+dump(list = objects(), file = "all.R")
+dump(c("A", "X"), file = "parts.R")
+```
+To retrieve the objects in a fucture session, type **source("XXX.R")**
+```{r, echo=TRUE}
+source("all.R")
+source("parts.R")
+```
+* To save all objects in the current workspace, type **save.image("XXX.RData")**.
+
+* To save parts of objects, type **save(a, b, c, file = "XXX.RData")**.
+
+* Use **load("XXX.RData")** to retrieve data.
+```{r, echo=FALSE}
+# Clear environment
+rm(list = ls())
+```
+
+```{r, echo=TRUE}
+X <- seq(0, 10, 0.1)
+A <- 3
+B <- mean(X)
+save.image("all.RData")
+save(A, B, file = "parts.RData")
+load("parts.RData")
+load("all.RData")
+```
+### Save data to a file
+You can save a matrix, a vector, or a data frame into two types of file, .txt(.dat) and .csv.
+
+* Use **write.table(A, file = "XXX.txt")**
+
+* Use **write.csv(A, file = "XXX.csv")**
+```{r, echo=FALSE}
+# Clear environment
+rm(list = ls())
+```
+Save a data frame into a file:
+```{r, echo=TRUE}
+colors <- c("red", "yellow", "blue")
+numbers <- c(1, 2, 3)
+X <- data.frame(colors, numbers, more.numbers = c(4, 5, 6))
+write.table(X, "matrix.txt")
+write.csv(X, "matrix.csv")
+```
+### Read data from a file
+You can load a matrix, a vector, or a data frame from two types of file, .txt(.dat) and .csv.
+
+* Use **read.table(file = "XXX.txt")**
+
+* Use **read.csv(file = "XXX.csv")**
+```{r, echo=TRUE}
+read.table("matrix.txt")
+read.csv("matrix.csv")
+```
+If you read a data from a file with names of columns, you will get different input data of read.table() from that of read.csv().
+
+With names of columns in a .txt file, you should add **header = TRUE**.
+
+## R Package
+### Introduction to R packages
+* Other than some basic functions, some developed methodologies and tools are provided in a way of packsges. You can download them from CRAN or Github.
+
+* To download a package, type **install.packages("XXX")**.
+
+* Before using some functions in a downloaded package, you should call the package by typing **library(XXX)**.
+
+Try package: data.table as follows.
+```{}
+install.packages("data.table")
+```
+### Use the functions in the installed packages
+* Before using some functions in a downloaded package, you should call the package by typing **library(XXX)**.
+
+Try the function **fread()**, which is similar to **read.table()** but faster and more convenient.
+```{r, results="hide"}
+library(data.table)
+```
+
+```{r, echo=TRUE}
+mydat <- fread('test.csv')
+head(mydat)
+```
+### Read data though internet
+Data: http://www.stats.ox.ac.uk/pub/datasets/csb/ch11b.dat
+```{r, echo=TRUE}
+input <- fread("http://www.stats.ox.ac.uk/pub/datasets/csb/ch11b.dat")
+head(input)
+```
+### More on packages
+https://cran.r-project.org/web/packages/
+
+https://www.r-bloggers.com/october-2019-top-40-new-r-packages/
+
+## Tools for help
+### Online help
+When you know the name of a function and you want to see how to use it, type **help(name)** or **?name**.
+
+For example:
+```{r, echo=TRUE}
+help(mean)
+?median
+```
+### Built-in examples
+A useful alternative to **help()** is the **example()** function.
+```{r, echo=TRUE}
+example(mean)
+```
+### Only knowing a keyword of function
+For finding help when you don't know the function name, type **help.search()**.
+```{r, echo=TRUE}
+help.search("optimization")
+```
