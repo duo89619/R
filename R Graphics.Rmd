@@ -1,0 +1,363 @@
+---
+title: "R Graphics"
+author: "H24076150"
+date: "2020/5/3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Statistical Figures
+### Graphics for descripitive statistics
+Given an arbitrary vector x:
+
+(1) Histogram: hist(x)
+
+(2) Boxplot: boxplot(x)
+
+(3) Density plot: plot(density(x))
+```{r, echo=TRUE}
+x.norm <- rnorm(100, mean = 0, sd = 1)
+hist(x.norm)
+boxplot(x.norm)
+plot(density(x.norm))
+```
+
+For discrete variables x:
+
+(1) Barchart: barplot(x)
+
+(2) Piechart: pie(x)
+```{r, echo=TRUE}
+x <- sample(c(1:8), 100, replace = TRUE, prob = c(8:1))
+x <- table(x)
+names(x) <- c("A", "B", "C", "D", "E", "F", "G", "H")
+barplot(x)
+pie(x)
+```
+
+Scatter plot is for the correlation between two variables.
+
+Use **plot(x, y)**
+```{r, echo=TRUE}
+x <- rnorm(100)
+y <- 3*x + rnorm(100, 0, 1)
+plot(x, y)
+cor(x, y)
+```
+### Scatter plots for multiple variables
+Use **pairs(...)**
+```{r, echo=TRUE}
+X <- matrix(rnorm(30), 10, 3) ## use matrix
+pairs(X, pch = 19)
+```
+
+### Boxplot for multiple categories
+```{r, echo=TRUE}
+X <- matrix(rnorm(50), 10, 5) ## use matrix
+boxplot(X)
+X <- data.frame(group = rep(c("A", "B", "C", "D", "E"), each = 10), res = rnorm(50)) ## use data.frame
+boxplot(res ~ group, data = X)
+```
+
+## High-level plotting functions: Creat a plot region with specifical items
+### General plot function: plot(...)
+```{}
+plot(x, y, 
+     type = "p",               ## types of the plot
+     pch = ,                   ## the symbol in the plot
+     main = NULL,              ## the title of the plot
+     lty = ,                   ## the style of a line
+     lwd = ,                   ## the width of a line
+     cex = ,                   ## the size of an text
+     bty = "o",                ## the box around the plot
+     col = ,                   ## the color of an object
+     xlim = NULL, ylin = NULL, ## the range of an axis
+     sub = NULL,               ## the sub-title of the plot
+     xlab = NULL, ylab = NULL, ## the name of an axis
+     cex.main =                ## the size of the title
+     )
+```
+### plot(..., type = ...)
+```{r, echo=TRUE}
+type = c("p", "l", "b", "s", "o", "h", "n")
+```
+* "p": points
+* "l": lines
+* "b": both points and lines
+* "o": lines pass through points
+* "h": the lines between points and x-axis
+* "n": no content in the plot but plot region
+```{r, echo=TRUE}
+par(mfrow = c(2, 3)) ## split plot ranges
+plot(x, y, type = "p", main = "p")
+plot(x, y, type = "l", main = "l")
+plot(x, y, type = "b", main = "b")
+plot(x, y, type = "o", main = "o")
+plot(x, y, type = "h", main = "h")
+plot(x, y, type = "n", main = "n")
+```
+
+### plot(..., pch = ...)
+Choose a symbols for points.
+```{}
+pch = c(1, 2, ..., 25, "*", ".", "o", "0", "0", "+", "-", "|", "%", "#")
+```
+### plot(..., cex = ...)
+Sizes in a plot: the number of times size of the default one
+
+* Size of points: **cex = 1.5**
+
+* Size of the title: **cex.main = 2**
+
+* Size of the labels of ticks of an axis: **cex.axis = 2**
+
+* Size of the labels of the name of an axis: **cex.lab = 2**
+
+### plot(..., pch = ..., cex = ....)
+```{r, echo=TRUE}
+par(mfrow = c(2, 3)) ## split plot ranges
+plot(x, y, pch = 1, main = "pch = 1")
+plot(x, y, pch = 3, main = "pch = 3", cex.main = 2)
+plot(x, y, pch = 10, main = "pch = 10", cex.axis = 2)
+plot(x, y, pch = 15, main = "pch = 15", cex = 2, cex.main = 2)
+plot(x, y, pch = 19, main = "pch = 19", cex = 2, cex.axis = 2)
+plot(x, y, pch = "#", main = "pch = #", cex = 2, cex.axis = 2, cex.lab = 2, cex.main = 2)
+```
+
+### plot(..., type = "l", lty = ..., lwd = ...)
+Lines in the plot:
+
+* The style of lines: **lty = 1, 2, ..., 7**
+
+* The width of lines: **lwd = 1, 1.25, ...**
+```{r, echo=TRUE}
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2, 3)) ## split plot ranges
+plot(t, y, type = "l")
+plot(t, y, type = "l", lty = 2)
+plot(t, y, type = "l", lty = 2, lwd = 2)
+plot(t, y, type = "l", lty = 3, lwd = 2)
+plot(t, y, type = "l", lty = 4, lwd = 2)
+plot(t, y, type = "l", lty = 5, lwd = 2)
+```
+
+### plot(..., bty = ...)
+The box around the plot:
+```{r, echo=TRUE}
+bty = c("o", "n", "7", "L", "C", "U")
+```
+* o: complete box (default parameter)
+
+* n: no box
+
+* 7: top & right
+
+* L: bottom & left
+
+* C: top & left & bottom
+
+* U: left & bottom & right
+```{r, echo=TRUE}
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2, 3)) ## split plot ranges
+plot(t, y, type = "l", bty = "o", main = "bty = \" o \"")
+plot(t, y, type = "l", bty = "n", main = "bty = \" n \"")
+plot(t, y, type = "l", bty = "7", main = "bty = \" 7 \"")
+plot(t, y, type = "l", bty = "L", main = "bty = \" L \"")
+plot(t, y, type = "l", bty = "C", main = "bty = \" C \"")
+plot(t, y, type = "l", bty = "U", main = "bty = \" U \"")
+```
+
+### plot(..., col = ...)
+Use **col** for colors.
+
+* Use number: **col = c(1, 2, 3, 4, 5, 6, 7, 8)**
+
+* Use name: **col = c("red", "green", "blue", "grey")**
+
+* Use hexadecimal code: **col = c("#009999", "#0000FF", ...)**
+
+* More on colors: help(palette)
+```{r, echo=TRUE}
+t <- 1:20
+y <- rnorm(20)
+
+par(mfrow = c(2, 3)) ## split plot ranges
+
+plot(t, y, type = "l", col = 1)
+plot(t, y, type = "l", col = 2)
+plot(t, y, type = "l", col = "green")
+plot(t, y, type = "l", col = "grey")
+plot(t, y, type = "l", col = "#009999")
+plot(t, y, type = "l", col = "#0000FF")
+```
+
+### plot(..., main = ..., sub = ..., xlab = ..., ylab = ...)
+Names of the plot:
+
+* main: main title (at the top)
+
+* sub: sub title (at the bottom)
+
+* xlab: name of x-axis
+
+* ylab: name of y-axis
+```{r, echo=TRUE}
+t <- 1:20
+y <- rnorm(20)
+
+par(mfrow = c(2, 3)) ## split plot ranges
+
+plot(t, y, type = "l")
+plot(t, y, type = "l", main = "Time series")
+plot(t, y, type = "l", main = "Time series", sub = "this year")
+plot(t, y, type = "l", main =  "Time series", xlab = "time")
+plot(t, y, type = "l", main =  "Time series", xlab = "time", ylab = "")
+plot(t, y, type = "l", main =  "Time series", xlab = "time", ylab = "return")
+```
+
+### plot(..., xlim = ..., ylim = ...)
+Ranges of variables
+
+* xlim = c(a, b): $a\leq x\leq b$
+
+* ylim = c(a, b): $a\leq y\leq b$
+```{r, echo=TRUE}
+t <- 1:20
+y <- rnorm(20)
+
+par(mfrow = c(2, 2)) ## split plot ranges
+plot(t, y, type = "b")
+plot(t, y, type = "b", xlim = c(0, 50))
+plot(t, y, type = "b", ylim = c(-5, 5))
+plot(t, y, type = "b", xlim = c(0, 50), ylim = c(-5, 5))
+```
+
+### curve(...)
+Instead using plot(x, y, type = "l"), use
+
+<center>curve(expression, from = ..., to = ...)</center>
+
+to draw a function of a variable.
+```{r, echo=TRUE}
+par(mfrow = c(2, 3))
+curve(exp(-x), 0, 10)
+curve(dnorm(x), -10, 10)
+curve(x^2, -10, 10)
+curve(sin, 0, 10)
+curve(3*exp(-3*x), 0, 6)
+curve(5*x+2, 0, 10)
+```
+
+## Low-level plotting functions: Add some objects to the existing plot
+### Add points or lines to an existing plot
+
+* **points(...)**: add points
+
+* **lines(...)**: add lines
+
+* **abline(...)**: add straight lines
+
+<center>abline(a = ..., b = ..., h = ..., v = ..., reg = ..., coef = ...)</center>
+```{r, echo=TRUE}
+plot(t, y, type = "b")
+abline(h = 0)
+abline(v = 15, lty = 2, col = 8, lwd = 2)
+points(t[15], y[15], pch = 19, col = 2)
+
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+
+plot(x, y, type = "p", pch = 19)
+abline(a = 0, b = 3)
+
+points(x, y1, col = 4, pch = 17)
+abline(a = 0, b = 5, col = 4)
+```
+
+### Add text to an existing plot
+Arbitrary locations:
+
+* **text(x, y, labels = ...)**
+
+Notations of objects in the plot:
+
+* **legend(x, y, legend, ...)**
+```{r, echo=TRUE}
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+
+plot(x, y, type = "p", pch = 19)
+abline(a = 0, b = 3)
+
+par(new=TRUE)
+plot(x, y1, col = 4, pch = 20)
+abline(a = 0, b = 5, col = 4)
+
+text(-1.5, 2, "A", cex = 5)
+text(1, -5, "B", cex = 5, col = 2)
+legend("topleft", c("Y", "Y1"), col = c(1, 4), lty = c(1, 1), cex = 2)
+```
+
+### Re-arrange the region of a figure
+Use **par(...)** to creat an arbitrary region
+
+* mfrow = c(2, 2): Define a multi-figure display by row
+
+* mfcol = c(2, 2): Define a multi-figure display by column
+
+* mai, mar = c(3, 3, 1, 1): The four margin sizes, in inches (mai), or in text line units (mar).
+```{r, echo=TRUE}
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+
+par(mfrow = c(1, 1), mar = c(0.5, 0.5, 0.5, 0.5))
+
+plot(x, y, type = "p", pch = 19)
+abline(a = 0, b = 3)
+
+par(new=TRUE)
+plot(x, y1, col = 4, pch = 20)
+abline(a = 0, b = 5, col = 4)
+
+text(-1.5, 2, "A", cex = 5)
+text(1, -5, "B", cex = 5, col = 2)
+legend("topleft", c("Y", "Y1"), col = c(1, 4), lty = c(1, 1), cex = 2)
+```
+
+### Split the whole plot by some locations of plot
+Use **layout(...)**
+
+* layout(matrix(c(1, 2, 3, 3), 2, 2, byrow = TRUE))
+```{r, echo=TRUE}
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+y2 <- -2*x + rnorm(50, 0, 2)
+
+layout(matrix(c(1, 2, 3, 3), 2, 2, byrow = TRUE))
+
+plot(x, y, type = "p", pch = 19, main = "Y")
+abline(a = 0, b = 3)
+
+plot(x, y1, type = "p", pch = 19, main = "Y1")
+abline(a = 0, b = 5)
+
+plot(x, y2, type = "p", pch = 19, main = "Y2")
+abline(a = 0, b = -2)
+```
+
+### Reference and packages
+
+* http://web.ntpu.edu.tw/~cflin/Teach/R/R06EN06Graphics.pdf
+
+* Package: ggplot2
+
+* Package: ggmap (or some related to map)
