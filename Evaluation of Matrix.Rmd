@@ -1,0 +1,80 @@
+---
+title: "Evaluation of Matrix"
+author: "H24076150"
+date: "2020/5/3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Simple evaluation on matrix
+```{r, echo=TRUE}
+A <- matrix(c(1:4), 2, 2)
+A + 3
+A - 1
+A * 5
+A / 4
+
+A <- matrix(c(1:4), 2, 2)
+B <- matrix(c(5:8), 2, 2)
+A + B
+A * B 
+
+C <- matrix(1:9, 3, 3)
+colSums(C)
+rowSums(C)
+colMeans(C)
+rowMeans(C)
+```
+## Transpose
+<center>$$
+\begin{bmatrix}
+A & B\\
+C & D
+\end{bmatrix}^t=
+\begin{bmatrix}
+A & C\\
+B & D
+\end{bmatrix}
+$$</center>
+```{r, echo=TRUE}
+t(A)
+t(C)
+```
+## Matrix multiplication
+Use **%*%** to evaluate multiplication og matrices.
+```{r, echo=TRUE}
+A %*% B
+```
+## Diagonal matrix
+```{r, echo=TRUE}
+diag(A)
+diag(B)
+diag(C)
+```
+## Determinant of a matrix
+```{r, echo=TRUE}
+det(A)
+det(B)
+det(C)
+```
+## Inverse matrix
+<center>$AA^{-1}=I$</center>
+
+Then, we call $A^{-1}$ is an inverse matrix of $A$.
+```{r, echo=TRUE}
+solve(A)
+solve(B)
+```
+## Eigen system
+Evaluate the eigen value and eigen vector.
+```{r, echo=TRUE}
+eigen(B)
+
+D <- matrix(rnorm(9), 3, 3)
+eig.D <- eigen(D)
+eig.D$values
+eig.D$vectors
+```
