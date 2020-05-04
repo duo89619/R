@@ -1,0 +1,223 @@
+---
+title: "RMarkdown"
+author: "H24076150"
+date: "2020/5/4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## RMarkdown
+* Compile a single R Markdown document to a report in different formats, such as PDF, HTML, or Word.
+
+* Creat notebooks in which you can directly run code chunks interactivity.
+
+* Make slides for presentations(HTML5, LaTex Beamer, or PowerPoint).
+
+Sources:
+
+https://bookdown.org/yihui/rmarkdown/
+
+https://rmarkdown.rstudio.com/articles_intro.html
+
+https://rmarkdown.rstudio.com/lesson-1.html
+
+https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+
+## Install package "RMarkdown"
+```{r, eval=FALSE}
+install.packages("rmarkdown")
+```
+* Start from creating a new file .Rmd
+
+(1) In the menu bar, click **File** -> **New File** -> **R Markdown**...
+  
+(2) A window will open. Select the class of output you would like to make with your .Rmd file
+  
+(3) Select the specific type of output to make with radio buttons (you can change this later)
+  
+(4) Click OK
+
+## Some basic editings
+In the .Rmd file,
+```{r, eval=FALSE}
+*italics* and _italics_
+**bold** and __bold__
+superscript^2^
+--strikethrough--
+```
+*italics* and _italics_
+
+**bold** and __bold__
+
+superscript^2^
+
+--strikethrough--
+
+## Headers of a Paragraph
+Use "#" to show the paragraph.
+```{r, eval=FALSE}
+# Header 1
+## Header 2
+### Header 3
+#### Header 4
+##### Header 5
+###### Header 6
+```
+In slides:
+
+Header 1 will be shown in the table of content.
+
+Header 2 will be the title of the slide.
+
+## Equations
+```{r, eval=FALSE}
+$A = \pi*r^{2}$
+$$B = 2 \pi r$$
+```
+Inline equation: $A = \pi*r^{2}$
+
+Center an equation: $$B = 2 \pi r$$
+
+## Bullet point
+```{r, eval=FALSE}
+* unordered list
+* item2
+    + sub-item 1
+
+1. ordered list
+2. item 2
+    + sub-item 1
+```
+* unordered list
+* item2
+    + sub-item 1
+
+1. ordered list
+2. item 2
+    + sub-item 1
+
+## Table (I)
+```{r, eval=FALSE}
+Table Header | Second Header
+------------ | -------------
+Table Cell   | Cell 2
+Cell 3       | Cell 4
+```
+Table Header | Second Header
+------------ | -------------
+Table Cell   | Cell 2
+Cell 3       | Cell 4
+
+## Table (II)
+```{r, eval=FALSE}
+\begin{table}[h]
+  \centering
+  \begin{tabular}{c|cc}
+    \hline
+    $x_j$ & 0 & 1 \\
+    \hline
+    $p_j$ & 0.3 & 0.7 \\
+    \hline
+  \end{tabular}
+  \caption{Random variable $X$ with its probability}
+\end{table}
+```
+
+## Matrix
+```{r, eval=FALSE}
+$\left[
+    \begin{array}{cc}
+      A & B \\
+      C & C \\
+    \ebd{array}
+ \right]$
+```
+$\left[
+    \begin{array}{cc}
+      A & B \\
+      C & D \\
+    \end{array}
+ \right]$
+
+## Inline R codes
+Two times three equals
+```{r, eval=FALSE}
+`r 2 * 3`
+```
+Two times three equals `r 2 * 3`.
+
+## R codes with graph
+Start a chunk with ```{r}. End a chunk with ```.
+```{r, echo=TRUE}
+y <- 2 * 3 - 1
+hist(rnorm(100))
+```
+
+Use **fig.width** and **fig.height** to adjust the size of a graph.
+```{r, echo=TRUE, fig.width=5, fig.height=5}
+
+hist(rnorm(100))
+```
+
+## Options
+Option     | default  | effect
+---------- | -------- | ----------------------------------------------------------
+eval       | TRUE     | Whether to evaluate the code and include its results
+echo       | TRUE     | Whether to display code along with its results
+warning    | TRUE     | Whether to display warnings
+error      | FALSE    | Whether to display errors
+message    | TRUE     | Whether to display messages
+tidy       | FALSE    | Whether to reformat code in a tidy way when displaying it
+results    | "markup" | "markup", "asis", "hold", or "hide"
+cache      | FALSE    | Whether to cache results for future renders
+comment    | "##"     | Comment character to preface results with
+fig.width  | 7        | Width in inches for plots created in chunk
+fig.height | 7        | Height in inches for plots created in chunk
+
+## Showing an existed figure
+In the XXX.Rmd, type the following code:
+```{r, eval=FALSE}
+![caption](name.jpg){width=25%}
+```
+![Taipei 101](20-05-02.jpg){width=25%}
+
+## Plot the pmf
+```{r, echo=TRUE}
+
+bin <- c(0.7,0.5,0.2)
+col_b <- c("black", "blue", "red")
+lty_b <- c(1,4,2)
+pch_b <- c(16,8,17)
+for(i in 1:length(bin)){
+  x <- 0:10
+  pmf <- dbinom(x,10,bin[i])
+  plot(x, pmf, type = c("h"), col = col_b[i], lty = lty_b[i], ylim = c(0.0, 0.4))
+  points(x, pmf, pch = pch_b[i], col = col_b[i])
+  if(i+1 <= length(bin)){
+    par(new = TRUE)
+  }
+}
+legend("topright", pch = pch_b, lty = lty_b, col = col_b, legend = c(expression(paste("p = 0.7")),expression(paste("p = 0.5")),expression(paste("p = 0.2"))))
+title(expression(paste("Binomial(n,p) with n = 10"))) 
+```
+
+## Some settings for the slides
+```{r, eval=FALSE}
+title: "AAA"
+author: "BBB"
+date: "May 4, 2020"
+output:
+  beamer_presentation:
+    slide_level: 2
+    toc: yes
+  ioslides_presentation: default
+  slidy_presentation: default
+theme: CambridgeUS
+colortheme: beaver
+```
+
+https://bookdown.org/yihui/rmarkdown/beamer-presentation.html
+
+https://hartwork.org/beamer-theme-matrix/
