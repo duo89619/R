@@ -1,0 +1,238 @@
+---
+title: "About Data"
+author: "H24076150"
+date: "2020/5/4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Remove NA
+### If NA, ...
+* is.na(X): easier for a vector.
+
+* complete.cases(X): X could be a sequence of vectors, matrices and data frames.
+
+* na.omit(X):
+
+Examples:
+```{r}
+airquality[1:8, ]
+dim(airquality)
+
+no.na <- complete.cases(airquality)
+head(airquality[no.na, ])
+
+data.no.na.1 <- airquality[no.na, ]
+dim(data.no.na.1)
+
+data.no.na.2 <- na.omit(airquality)
+dim(data.no.na.2)
+```
+
+## Data Processing
+### Multiples datasets
+* Using **cbind(...)** and **rbind(...)** to combine datasets.
+
+* Using **cut(...)** to group or to label items.
+
+For example, would like to label 5 groups by the variable "Wind".
+```{r}
+grouped1 <- cut(airquality[, 3], 5)
+head(grouped1)
+
+grouped2 <- cut(airquality[, 3], 5, labels = c("G1", "G2", "G3", "G4", "G5"))
+head(grouped2)
+```
+### Summary the grouped data
+(1) Summarize the number of each group.
+```{r}
+airquality$group <- grouped2
+table(grouped2)
+```
+### Ordering the dataset
+(2) After labeling the group, order the dataset by the group.
+
+**order(...)**
+```{r}
+order.data.1 <- airquality[order(airquality$group), ]
+head(order.data.1)
+```
+If there is no column for further sorting, it returns the result sorted by the index of the row.
+
+(3) Keep ordering the dataset by the temprature.
+
+**order(first, second, ...)**
+```{}
+order.data.2 <- airquality[order(airquality$group, airquality$Temp), ]
+head(order.data.2)
+```
+
+## Package: reshape2
+### Change the format from original one
+Package: "reshape2"
+
+For example, the dataset is as follows:
+```{r}
+game <- c("G1", "G2", "G3", "G4", "G5")
+site <- c("M", "O", "L", "O", "L")
+Lin <- c(15, 6, 26, 22, 18)
+Jordan <- c(18, 32, 21, 25, 12)
+Peter <- c(10, 6, 22, 9, 12)
+ballgames <- data.frame(game, site, Lin, Jordan, Peter)
+```
+
+```{r, eval=FALSE}
+install.packages("reshape2")
+```
+
+### melt(...)
+USe **melt(data, id.vars)** to reshape the dataset.
+```{r, warning=FALSE}
+library(reshape2)
+after.reshape <- melt(ballgames, id.vars = c("game", "site"))
+after.reshape
+name <- c("Lin", "Jordan", "Peter")
+```
+
+### dcast(...)
+Use **dcast(dataset, formula, fun)** to show the specific data format.
+```{r, echo=TRUE}
+dcast(after.reshape, game + site ~ name, sum)
+
+dcast(after.reshape, name ~ game, sum)
+
+dcast(after.reshape, name ~ site, sum)
+
+dcast(after.reshape, name + site ~ game, sum)
+```
+
+### Merge data
+Two datasets:
+```{r}
+Lin.game <- ballgames[ballgames[, "Lin"] > 20, c("game", "site", "Lin")]
+Jordan.game <- ballgames[ballgames[, "Jordan"] > 20, c("game", "site", "Jordan")]
+Lin.game
+Jordan.game
+```
+
+Using **merge(...)** to combine datasets to a new dataset by
+
+(1) intersection
+
+(2) union
+
+By intersection:
+```{r, echo=TRUE}
+merge(Lin.game, Jordan.game)
+```
+
+By union:
+
+set **all = TRUE** in merge(...)
+```{r}
+merge(Lin.game, Jordan.game, all = TRUE)
+```
+
+Merge data by the infromation of the specific dataset.
+
+* merge(x, y, all.x = TRUE)
+
+* merge(x, y, all.y = TRUE)
+```{r}
+merge(Lin.game, Jordan.game, all.x = TRUE)
+merge(Lin.game, Jordan.game, all.y = TRUE)
+```
+
+## Regression
+### linear model: lm(...)
+* Regression is used to show the relationship between independent variables and dependent variables.
+
+* Before data analysis, we should check the relation plot.
+```{r}
+pairs(airquality[, c(1, 3, 4)])
+```
+
+lm(formula, data)
+
+formula: $y$ ~ $x_1+x_2$ (with intercept)
+
+formula: $y$ ~ $x_1+x_2$ (no intercept)
+```{r}
+data1 <- airquality[1:120, ]
+data2 <- airquality[121:153, ]
+lm1 <- lm(Ozone ~ Temp, data = data1)
+lm2 <- lm(Ozone ~ Temp - 1, data = data1)
+```
+
+### lm(...)
+Result 1:
+```{r}
+summary(lm1)
+```
+
+Result 2:
+```{r}
+summary(lm2)
+```
+
+### Prediction by the fitted linear model
+```{r}
+y.predict <- predict(lm1, data2)
+y.predict
+```
+
+### Performance of fitted model
+```{r}
+plot(airquality[, 4], airquality[, 1], pch = 19)
+abline(lm1)
+points(airquality[121:153, 4], y.predict, col = 2, pch = 19)
+```
+
+### Performance of prediction
+```{r}
+plot(airquality[121:153, 1], y.predict, pch = 19)
+abline(0, 1)
+```
+
+## Package: dplyr
+### %>% in package: dplyr
+%>% means that apply functions to an object.
+```{r, eval=FALSE}
+install.packages("dplyr")
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+```
+
+```{r}
+y <- sample(1:100, 10)
+mean(y)
+y %>% mean()
+min(y)
+y %>% min()
+```
+
+### Multiple functions
+```{r}
+sample(1:100, 5) %>% mean()
+sample(1:100, 10) %>% min()
+```
+
+### %>%
+Write a code to report the last name of each member.
+```{r}
+nba_stars <- c("Stephen Curry", "Lebron James")
+names <- strsplit(nba_stars, split = " ")
+toupper(names[[1]][2])
+```
+
+```{r}
+nba_stars %>%
+  strsplit(, split = " ") %>%
+  `[[` (1) %>%
+  `[` (2) %>%
+  toupper()
+```
