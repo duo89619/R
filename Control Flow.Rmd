@@ -288,6 +288,7 @@ The pattern of repetition isn't known in advance and we need to do some calculat
 <center>while (condition) statements</center>
 
 If the condition evaluates to FALSE, nothing more is done. If it evaluates to TRUE the statements are executef, condition is evaluated again, and the process is repeated.
+
 ### Relationship between for() and while()
 * for
 ```{r, echo=TRUE}
@@ -342,7 +343,7 @@ N
 
 The break statement causes the loop to terminate immediately. Break statements can also be used in for() and while() loops.
 
-*repeat
+* repeat
 
 Use "repeat" to repeat until we execute a break statement.
 
@@ -350,7 +351,7 @@ repeat {statements}
 
 This causes the statements to be repeated endlessly.
 
-*next
+* next
 
 The next statement causes control to return immediately to the top of the loop; it can also be used in any loop.
 ### Fibonacci number (2)

@@ -75,10 +75,14 @@ setequal(B, C)
 ```
 ### Sorting and ordering of a vector
 From small to large values, use "sort()" or "order()" to sort a vector or get the position of sorting a vector.
+
 * sort(x, decreasing = FALSE)
+
 * order(..., na.last = TRUE, decreasing = FALSE)
 Let a = {3,4,2,7,10,23,8,9,11}
+
 * Increasing: {2,3,4,7,8,9,10,11,23}
+
 * Decreasing: {23,11,10,9,8,7,4,3,2}
 ```{r, echo=TRUE}
 a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
@@ -87,6 +91,7 @@ sort(a, decreasing = TRUE)
 ```
 ### Get the position of sorting of a vector
 Get the position (index) of sorting of a vector
+
 * order(..., na.last = TRUE, decreasing = FALSE)
 ```{r, echo=TRUE}
 a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
@@ -126,6 +131,7 @@ strsplit(TEXT2, "!")
 ```
 ### Lowercase and uppercase
 * toupper(): change to uppercase
+
 * tolower(): change to lowercase
 ```{r, echo=TRUE}
 toupper(TEXT1)
@@ -133,6 +139,7 @@ tolower(TEXT2)
 ```
 ### Character vectors
 * Character vector: the vector is made up of strings of characters.
+
 * All elements of a vector must be of the same type.
 ```{r, echo=TRUE}
 colors <- c("red", "yellow", "BLUE")
@@ -194,8 +201,11 @@ F
 ```
 ### Logical number
 Binary operators which allow the comparison of values in atomic vectors (relational operators).
+
 * Number: Compare 3 and 5
+
 * "==": equal
+
 * "!=": not equal
 ```{r, echo=TRUE}
 c(3 < 5, 3 > 5)
